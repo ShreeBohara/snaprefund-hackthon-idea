@@ -1,0 +1,109 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "./tokens.css";
+
+@layer base {
+  * {
+    @apply border-brand-surface;
+  }
+
+  ::selection {
+    background: var(--primary-soft);
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Manrope, ui-sans-serif, system-ui;
+    color: var(--text);
+    background:
+      radial-gradient(circle at 8% 5%, rgba(11, 95, 255, 0.2), transparent 36%),
+      radial-gradient(circle at 90% 2%, rgba(27, 138, 90, 0.16), transparent 28%),
+      radial-gradient(circle at 80% 70%, rgba(183, 121, 31, 0.1), transparent 26%),
+      linear-gradient(165deg, var(--bg), var(--bg-2));
+  }
+
+  button:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+  }
+
+  button {
+    transition: transform 120ms ease, box-shadow 120ms ease, background-color 120ms ease, border-color 120ms ease;
+  }
+}
+
+@layer components {
+  .panel {
+    @apply rounded-2xl border bg-white p-4 shadow-soft;
+    border-color: var(--border);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(249, 251, 255, 0.94));
+  }
+
+  .panel-elevated {
+    @apply panel;
+    border-color: var(--border-strong);
+    box-shadow:
+      0 18px 35px rgba(15, 23, 42, 0.09),
+      inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  }
+
+  .subtle {
+    color: var(--muted);
+  }
+
+  .eyebrow {
+    @apply text-[11px] font-bold uppercase tracking-[0.16em] text-slate-500;
+  }
+
+  .soft-pill {
+    @apply inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold;
+    border-color: var(--border);
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(4px);
+  }
+
+  .surface-soft {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(245, 249, 255, 0.9));
+  }
+}
+
+@layer utilities {
+  .animate-fade-up {
+    animation: fade-up 420ms ease both;
+  }
+
+  .thin-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #bac8e2 #eef3fb;
+  }
+
+  .thin-scrollbar::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .thin-scrollbar::-webkit-scrollbar-track {
+    background: #eef3fb;
+  }
+
+  .thin-scrollbar::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    background: #bac8e2;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

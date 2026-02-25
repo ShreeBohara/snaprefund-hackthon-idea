@@ -1,0 +1,20 @@
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap");
+
+:root {
+  --bg: #f4f7fb;
+  --bg-2: #edf3ff;
+  --surface: #ffffff;
+  --surface-soft: #f9fbff;
+  --text: #0f172a;
+  --primary: #0b5fff;
+  --primary-soft: #dce8ff;
+  --danger: #c62828;
+  --danger-soft: #ffe6e6;
+  --warn: #b7791f;
+  --warn-soft: #fff4da;
+  --success: #1b8a5a;
+  --success-soft: #dcf5e8;
+  --muted: #53627c;
+  --border: #d7e1f1;
+  --border-strong: #b9c9e6;
+}
