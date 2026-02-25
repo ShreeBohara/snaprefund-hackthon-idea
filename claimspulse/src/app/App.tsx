@@ -25,6 +25,7 @@ import { MockGateway } from "../lib/gateways/mockGateway";
 import type { PaymentGateway } from "../lib/gateways/paymentGateway";
 import { SnapRefundGateway } from "../lib/gateways/snapRefundGateway";
 import { formatCurrency } from "../lib/utils/format";
+import { useTheme } from "../theme/ThemeProvider";
 
 interface Notice {
   tone: "info" | "error" | "success";
@@ -83,6 +84,7 @@ export function App() {
   const configuredMode =
     String(import.meta.env.VITE_DATA_MODE ?? "mock").toLowerCase() === "live" ? "live" : "mock";
   const openAiApiKey = import.meta.env.VITE_OPENAI_API_KEY as string | undefined;
+  const { mode, toggle } = useTheme();
 
   const liveBaseUrl = import.meta.env.VITE_SNAPREFUND_BASE_URL as string | undefined;
   const liveToken = import.meta.env.VITE_SNAPREFUND_TOKEN as string | undefined;
@@ -260,8 +262,8 @@ export function App() {
         <div className="grid gap-4 p-5 lg:grid-cols-[2.2fr_1fr] lg:p-6">
           <div>
             <p className="eyebrow">Claims Intelligence</p>
-            <h1 className="mt-1 text-3xl font-extrabold text-slate-900 md:text-4xl">ClaimsPulse</h1>
-            <p className="mt-2 max-w-2xl text-sm subtle md:text-base">
+            <h1 className="mt-1 text-3xl font-extrabold text-main md:text-4xl">ClaimsPulse</h1>
+            <p className="mt-2 max-w-2xl text-sm text-muted md:text-base">
               Detect stale and failed claim payouts, prioritize high-impact recoveries, and guide next best action in a
               single command center.
             </p>
@@ -270,20 +272,23 @@ export function App() {
               <span className="soft-pill">Mode: {configuredMode === "live" ? "Live Adapter" : "Mock Adapter"}</span>
               <span className="soft-pill">{loadingSources ? "Loading sources..." : `${fundingSources.length} funding sources`}</span>
               <span className="soft-pill">Updated {now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span>
+              <button className="btn-secondary px-3 py-1 text-xs" onClick={toggle} type="button">
+                Theme: {mode === "dark" ? "Dark" : "Light"}
+              </button>
             </div>
           </div>
 
-          <div className="rounded-xl border border-slate-200 bg-white/80 p-4">
+          <div className="card p-4">
             <p className="eyebrow">Now</p>
-            <p className="mt-1 text-sm font-semibold text-slate-900">
+            <p className="mt-1 text-sm font-semibold text-main">
               {topPriority
                 ? `Top risk: ${topPriority.payment.claimId} ${formatCurrency(topPriority.payment.amountUsd)}`
                 : "No active critical queue"}
             </p>
-            <p className="mt-2 text-sm subtle">Actionable exposure (top 8): {formatCurrency(actionableExposure)}</p>
+            <p className="mt-2 text-sm text-muted">Actionable exposure (top 8): {formatCurrency(actionableExposure)}</p>
             <button
               onClick={resetDemoData}
-              className="mt-4 rounded-lg bg-brand-primary px-3 py-2 text-sm font-semibold text-white shadow hover:-translate-y-px hover:shadow-md"
+              className="btn-primary mt-4 px-3 py-2 text-sm"
               type="button"
             >
               Reset Demo Data
@@ -294,20 +299,16 @@ export function App() {
 
       {notice && (
         <div
-          className={`mb-4 flex items-center justify-between gap-3 rounded-xl px-4 py-3 text-sm font-semibold ${
+          className={`notice mb-4 flex items-center justify-between gap-3 ${
             notice.tone === "error"
-              ? "border border-red-200 bg-red-100 text-red-900"
+              ? "notice-error"
               : notice.tone === "success"
-                ? "border border-emerald-200 bg-emerald-100 text-emerald-900"
-                : "border border-blue-200 bg-blue-100 text-blue-900"
+                ? "notice-success"
+                : "notice-info"
           }`}
         >
           <p>{notice.text}</p>
-          <button
-            className="rounded-md border border-current px-2 py-1 text-xs font-bold"
-            onClick={() => setNotice(null)}
-            type="button"
-          >
+          <button className="btn-secondary px-2 py-1 text-xs" onClick={() => setNotice(null)} type="button">
             Dismiss
           </button>
         </div>
@@ -360,31 +361,27 @@ export function App() {
       </div>
 
       {draftPreview && (
-        <div className="fixed inset-0 z-40 flex items-center justify-center bg-slate-900/40 p-4 backdrop-blur-sm">
-          <div className="surface-soft w-full max-w-3xl rounded-2xl border border-slate-200 p-5 shadow-2xl">
+        <div className="overlay-backdrop fixed inset-0 z-40 flex items-center justify-center p-4">
+          <div className="dialog-surface w-full max-w-3xl p-5">
             <div className="flex items-start justify-between gap-2">
               <div>
                 <p className="eyebrow">Generated Outreach</p>
-                <h3 className="text-lg font-bold text-slate-900">Follow-up Drafts ({draftPreview.paymentId})</h3>
-                <p className="text-sm subtle">Copy-ready templates for SMS and email outreach.</p>
+                <h3 className="text-lg font-bold text-main">Follow-up Drafts ({draftPreview.paymentId})</h3>
+                <p className="text-sm text-muted">Copy-ready templates for SMS and email outreach.</p>
               </div>
-              <button
-                className="rounded-lg border border-slate-300 bg-white px-3 py-1 text-sm font-semibold"
-                onClick={() => setDraftPreview(null)}
-                type="button"
-              >
+              <button className="btn-secondary px-3 py-1 text-sm" onClick={() => setDraftPreview(null)} type="button">
                 Close
               </button>
             </div>
 
             <div className="mt-4 grid gap-3 md:grid-cols-2">
-              <div className="rounded-xl border border-slate-200 bg-white p-3">
+              <div className="card p-3">
                 <p className="eyebrow">SMS Draft</p>
-                <p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-slate-800">{draftPreview.sms}</p>
+                <p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-main">{draftPreview.sms}</p>
               </div>
-              <div className="rounded-xl border border-slate-200 bg-white p-3">
+              <div className="card p-3">
                 <p className="eyebrow">Email Draft</p>
-                <p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-slate-800">{draftPreview.email}</p>
+                <p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-main">{draftPreview.email}</p>
               </div>
             </div>
           </div>

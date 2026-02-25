@@ -20,21 +20,23 @@ export function PriorityQueue({
 }: PriorityQueueProps) {
   if (items.length === 0) {
     return (
-      <section className="panel-elevated animate-fade-up">
+      <section className="panel-elevated animate-fade-up p-4">
         <p className="eyebrow">Priority Queue</p>
-        <h2 className="mt-1 text-lg font-bold text-slate-900">No active risks right now</h2>
-        <p className="mt-2 text-sm subtle">All actionable payments are clear. Keep monitoring for new failures or stale payouts.</p>
+        <h2 className="mt-1 text-lg font-bold text-main">No active risks right now</h2>
+        <p className="mt-2 text-sm text-muted">
+          All actionable payments are clear. Keep monitoring for new failures or stale payouts.
+        </p>
       </section>
     );
   }
 
   return (
-    <section className="panel-elevated animate-fade-up">
+    <section className="panel-elevated animate-fade-up p-4">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
         <div>
           <p className="eyebrow">Priority Queue</p>
-          <h2 className="text-lg font-bold text-slate-900">Immediate Action List</h2>
-          <p className="text-sm subtle">Sorted by risk score so adjusters can act in order.</p>
+          <h2 className="text-lg font-bold text-main">Immediate Action List</h2>
+          <p className="text-sm text-muted">Sorted by risk score so adjusters can act in order.</p>
         </div>
         <p className="soft-pill">{items.length} actionable payments</p>
       </div>

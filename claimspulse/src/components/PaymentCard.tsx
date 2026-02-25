@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import type { PriorityItem, TriageSuggestion } from "../features/payments/types";
 import { formatCurrency, formatHours } from "../lib/utils/format";
 import { StatusBadge } from "./StatusBadge";
@@ -13,22 +14,43 @@ interface PaymentCardProps {
 
 type ActionKey = "resend" | "switch-bank" | "replacement" | "draft";
 
-const bandAccent: Record<PriorityItem["risk"]["priorityBand"], { ring: string; pill: string }> = {
+interface AccentStyle {
+  borderColor: string;
+  pill: CSSProperties;
+}
+
+const bandAccent: Record<PriorityItem["risk"]["priorityBand"], AccentStyle> = {
   low: {
-    ring: "border-slate-200",
-    pill: "border-slate-300 bg-slate-100 text-slate-700"
+    borderColor: "var(--border)",
+    pill: {
+      background: "rgba(157, 176, 207, 0.18)",
+      borderColor: "rgba(157, 176, 207, 0.42)",
+      color: "var(--text)"
+    }
   },
   medium: {
-    ring: "border-amber-300",
-    pill: "border-amber-200 bg-amber-100 text-amber-900"
+    borderColor: "rgba(241, 187, 98, 0.54)",
+    pill: {
+      background: "rgba(241, 187, 98, 0.17)",
+      borderColor: "rgba(241, 187, 98, 0.5)",
+      color: "var(--text)"
+    }
   },
   high: {
-    ring: "border-orange-400",
-    pill: "border-orange-200 bg-orange-100 text-orange-900"
+    borderColor: "rgba(77, 163, 255, 0.56)",
+    pill: {
+      background: "rgba(77, 163, 255, 0.18)",
+      borderColor: "rgba(77, 163, 255, 0.48)",
+      color: "var(--text)"
+    }
   },
   critical: {
-    ring: "border-red-500",
-    pill: "border-red-200 bg-red-100 text-red-900"
+    borderColor: "rgba(255, 110, 127, 0.62)",
+    pill: {
+      background: "rgba(255, 110, 127, 0.17)",
+      borderColor: "rgba(255, 110, 127, 0.52)",
+      color: "var(--text)"
+    }
   }
 };
 
@@ -59,10 +81,10 @@ function getPrimaryActionKey(suggestion: TriageSuggestion): ActionKey {
 
 function actionButtonClass(isPrimary: boolean): string {
   if (isPrimary) {
-    return "rounded-lg bg-brand-primary px-3 py-2 text-sm font-semibold text-white shadow hover:-translate-y-px hover:shadow-md disabled:cursor-not-allowed disabled:bg-slate-300";
+    return "btn-primary px-3 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-50";
   }
 
-  return "rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-800 hover:-translate-y-px hover:border-slate-400 disabled:cursor-not-allowed disabled:bg-slate-100";
+  return "btn-secondary px-3 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-45";
 }
 
 export function PaymentCard({
@@ -79,45 +101,52 @@ export function PaymentCard({
   const primaryAction = getPrimaryActionKey(suggestion);
 
   return (
-    <article className={`surface-soft rounded-xl border-2 p-4 ${accent.ring}`}>
+    <article className="card-strong p-4" style={{ borderColor: accent.borderColor }}>
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="space-y-1">
-          <p className="font-mono text-xs uppercase tracking-wide text-slate-500">{payment.id}</p>
-          <h3 className="text-lg font-bold text-slate-900">{payment.claimId}</h3>
-          <p className="text-sm subtle">{payment.recipientEmail}</p>
+          <p className="font-mono text-xs uppercase tracking-wide text-muted">{payment.id}</p>
+          <h3 className="text-lg font-bold text-main">{payment.claimId}</h3>
+          <p className="text-sm text-muted">{payment.recipientEmail}</p>
         </div>
 
         <div className="space-y-2 text-right">
-          <p className="text-2xl font-extrabold text-slate-900">{formatCurrency(payment.amountUsd)}</p>
+          <p className="text-2xl font-extrabold text-main">{formatCurrency(payment.amountUsd)}</p>
           <div className="flex flex-wrap justify-end gap-2">
             <StatusBadge status={payment.status} />
-            <span className={`rounded-full border px-2 py-1 text-xs font-bold uppercase tracking-wide ${accent.pill}`}>
+            <span className="badge border uppercase" style={accent.pill}>
               {risk.priorityBand}
             </span>
           </div>
         </div>
       </div>
 
-      <div className="mt-4 rounded-lg border border-slate-200 bg-white/80 p-3">
+      <div className="card mt-4 p-3">
         <p className="eyebrow">AI Recommendation</p>
-        <p className="mt-1 text-sm font-semibold text-slate-900">{recommendationLabel[suggestion.recommendedAction]}</p>
-        <p className="mt-2 text-sm text-slate-700">{suggestion.rationale}</p>
+        <p className="mt-1 text-sm font-semibold text-main">{recommendationLabel[suggestion.recommendedAction]}</p>
+        <p className="mt-2 text-sm text-muted">{suggestion.rationale}</p>
       </div>
 
-      <div className="mt-3 grid gap-2 text-xs text-slate-700 sm:grid-cols-3">
-        <p className="rounded-md bg-white/80 px-2 py-1">
+      <div className="mt-3 grid gap-2 text-xs text-main sm:grid-cols-3">
+        <p className="card px-2 py-1">
           <span className="font-semibold">Stale:</span> {formatHours(risk.hoursStale)}
         </p>
-        <p className="rounded-md bg-white/80 px-2 py-1">
+        <p className="card px-2 py-1">
           <span className="font-semibold">Risk score:</span> {Math.round(risk.riskScore).toLocaleString()}
         </p>
-        <p className="rounded-md bg-white/80 px-2 py-1">
+        <p className="card px-2 py-1">
           <span className="font-semibold">Status weight:</span> {risk.statusWeight.toFixed(1)}
         </p>
       </div>
 
       {payment.supersededByPaymentId && (
-        <p className="mt-3 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900">
+        <p
+          className="mt-3 rounded-lg border px-3 py-2 text-sm"
+          style={{
+            background: "rgba(45, 207, 159, 0.14)",
+            borderColor: "rgba(45, 207, 159, 0.44)",
+            color: "var(--text)"
+          }}
+        >
           Recovered. This payment was superseded by {payment.supersededByPaymentId}.
         </p>
       )}
@@ -127,6 +156,7 @@ export function PaymentCard({
           className={actionButtonClass(primaryAction === "resend")}
           onClick={() => onResend(payment.id)}
           disabled={disabled}
+          type="button"
         >
           Resend Link
         </button>
@@ -134,6 +164,7 @@ export function PaymentCard({
           className={actionButtonClass(primaryAction === "switch-bank")}
           onClick={() => onSwitchBank(payment.id)}
           disabled={disabled}
+          type="button"
         >
           Switch Bank
         </button>
@@ -141,10 +172,15 @@ export function PaymentCard({
           className={actionButtonClass(primaryAction === "replacement")}
           onClick={() => onCreateReplacement(payment.id)}
           disabled={disabled}
+          type="button"
         >
           Create Replacement
         </button>
-        <button className={actionButtonClass(primaryAction === "draft")} onClick={() => onGenerateDraft(payment.id)}>
+        <button
+          className={actionButtonClass(primaryAction === "draft")}
+          onClick={() => onGenerateDraft(payment.id)}
+          type="button"
+        >
           Generate SMS/Email
         </button>
       </div>

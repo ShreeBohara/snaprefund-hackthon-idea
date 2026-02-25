@@ -1,20 +1,105 @@
-@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap");
 
 :root {
-  --bg: #f4f7fb;
-  --bg-2: #edf3ff;
+  --bg: #f2f6ff;
+  --bg-2: #e8f0ff;
   --surface: #ffffff;
-  --surface-soft: #f9fbff;
-  --text: #0f172a;
-  --primary: #0b5fff;
+  --surface-soft: #f6f9ff;
+  --surface-elevated: #ffffff;
+  --text: #132543;
+  --text-strong: #091428;
+  --muted: #5e7299;
+  --border: #d5e2f6;
+  --border-strong: #b4c9e9;
+  --primary: #256cff;
   --primary-soft: #dce8ff;
-  --danger: #c62828;
-  --danger-soft: #ffe6e6;
-  --warn: #b7791f;
-  --warn-soft: #fff4da;
-  --success: #1b8a5a;
-  --success-soft: #dcf5e8;
-  --muted: #53627c;
-  --border: #d7e1f1;
-  --border-strong: #b9c9e6;
+  --accent-cyan: #1fb9d8;
+  --success: #1fb886;
+  --warn: #b7872f;
+  --danger: #d8516a;
+
+  --overlay: rgba(8, 18, 41, 0.46);
+  --shadow-color: 23, 37, 66;
+  --scrollbar-thumb: #b5c8ea;
+  --scrollbar-track: #eaf1ff;
+  --chip-bg: rgba(255, 255, 255, 0.74);
+  --input-bg: #ffffff;
+  --input-border: #c7d9f3;
+  --focus-ring: #5f9dff;
+
+  --status-awaiting-bg: #fff2d9;
+  --status-awaiting-border: #f3ce8a;
+  --status-awaiting-text: #7d5a19;
+
+  --status-failed-bg: #ffe4e8;
+  --status-failed-border: #f5b7c2;
+  --status-failed-text: #8f2139;
+
+  --status-completed-bg: #dbf7ec;
+  --status-completed-border: #9be3c4;
+  --status-completed-text: #146649;
+
+  --status-cancelled-bg: #e6ebf5;
+  --status-cancelled-border: #c6d2e8;
+  --status-cancelled-text: #41587b;
+
+  --status-transit-bg: #e0edff;
+  --status-transit-border: #b6cdf8;
+  --status-transit-text: #1d4d98;
+
+  --status-lock-bg: #ece7ff;
+  --status-lock-border: #d0c2ff;
+  --status-lock-text: #4f369a;
+}
+
+[data-theme="dark"] {
+  --bg: #070d19;
+  --bg-2: #0b1424;
+  --surface: #101b2f;
+  --surface-soft: #14233a;
+  --surface-elevated: #172942;
+  --text: #e9f2ff;
+  --text-strong: #f4f8ff;
+  --muted: #9db0cf;
+  --border: #263a5d;
+  --border-strong: #34507a;
+  --primary: #4da3ff;
+  --primary-soft: #16365c;
+  --accent-cyan: #3be5ff;
+  --success: #2dcf9f;
+  --warn: #f1bb62;
+  --danger: #ff6e7f;
+
+  --overlay: rgba(3, 8, 18, 0.68);
+  --shadow-color: 4, 12, 24;
+  --scrollbar-thumb: #38567f;
+  --scrollbar-track: #10203a;
+  --chip-bg: rgba(16, 27, 47, 0.78);
+  --input-bg: #0f1e35;
+  --input-border: #35517b;
+  --focus-ring: #7db8ff;
+
+  --status-awaiting-bg: rgba(241, 187, 98, 0.18);
+  --status-awaiting-border: rgba(241, 187, 98, 0.48);
+  --status-awaiting-text: #ffd79a;
+
+  --status-failed-bg: rgba(255, 110, 127, 0.16);
+  --status-failed-border: rgba(255, 110, 127, 0.46);
+  --status-failed-text: #ffb1bd;
+
+  --status-completed-bg: rgba(45, 207, 159, 0.16);
+  --status-completed-border: rgba(45, 207, 159, 0.46);
+  --status-completed-text: #95ffd9;
+
+  --status-cancelled-bg: rgba(157, 176, 207, 0.14);
+  --status-cancelled-border: rgba(157, 176, 207, 0.36);
+  --status-cancelled-text: #d4def1;
+
+  --status-transit-bg: rgba(77, 163, 255, 0.15);
+  --status-transit-border: rgba(77, 163, 255, 0.43);
+  --status-transit-text: #add6ff;
+
+  --status-lock-bg: rgba(130, 135, 255, 0.16);
+  --status-lock-border: rgba(130, 135, 255, 0.44);
+  --status-lock-text: #c5c8ff;
 }

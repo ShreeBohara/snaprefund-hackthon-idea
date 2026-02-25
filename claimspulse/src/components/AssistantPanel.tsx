@@ -50,15 +50,15 @@ export function AssistantPanel({ openAiAvailable, onAsk }: AssistantPanelProps) 
   }
 
   return (
-    <section className="panel-elevated animate-fade-up h-full">
+    <section className="panel-elevated animate-fade-up h-full p-4">
       <div className="mb-3 flex flex-wrap items-start justify-between gap-2">
         <div>
           <p className="eyebrow">Assistant</p>
-          <h2 className="text-lg font-bold text-slate-900">Claims Co-Pilot</h2>
-          <p className="text-sm subtle">Structured Q&A for adjusters with deterministic answers.</p>
+          <h2 className="text-lg font-bold text-main">Claims Co-Pilot</h2>
+          <p className="text-sm text-muted">Structured Q&A for adjusters with deterministic answers.</p>
         </div>
         <button
-          className="rounded-lg border border-slate-300 bg-white px-3 py-1 text-xs font-semibold text-slate-700"
+          className="btn-secondary px-3 py-1 text-xs"
           onClick={() =>
             setMessages([
               {
@@ -73,28 +73,42 @@ export function AssistantPanel({ openAiAvailable, onAsk }: AssistantPanelProps) 
         </button>
       </div>
 
-      <div className="thin-scrollbar max-h-[390px] space-y-3 overflow-y-auto rounded-xl border border-slate-200 bg-slate-50/80 p-3">
+      <div className="thin-scrollbar max-h-[390px] space-y-3 overflow-y-auto rounded-xl border p-3" style={{ borderColor: "var(--border)", background: "var(--surface)" }}>
         {messages.map((message, index) => (
           <div
             key={`${message.role}-${index}`}
-            className={`max-w-[94%] rounded-xl px-3 py-2 text-sm ${
+            className="max-w-[94%] rounded-xl px-3 py-2 text-sm"
+            style={
               message.role === "assistant"
-                ? "mr-auto border border-slate-200 bg-white text-slate-800"
-                : "ml-auto bg-blue-600 text-white"
-            }`}
+                ? {
+                    marginRight: "auto",
+                    border: "1px solid var(--border)",
+                    background: "var(--surface-soft)",
+                    color: "var(--text)"
+                  }
+                : {
+                    marginLeft: "auto",
+                    background: "linear-gradient(130deg, var(--primary), var(--accent-cyan))",
+                    color: "#041426"
+                  }
+            }
           >
             <p className="whitespace-pre-wrap leading-relaxed">{message.text}</p>
-            {message.warning ? <p className="mt-1 text-xs text-amber-700">{message.warning}</p> : null}
+            {message.warning ? (
+              <p className="mt-1 text-xs" style={{ color: "var(--warn)" }}>
+                {message.warning}
+              </p>
+            ) : null}
           </div>
         ))}
-        {loading && <p className="text-sm subtle">Generating response...</p>}
+        {loading && <p className="text-sm text-muted">Generating response...</p>}
       </div>
 
       <div className="mt-3 grid gap-2 sm:grid-cols-2">
         {SUGGESTED_PROMPTS.map((prompt) => (
           <button
             key={prompt}
-            className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-left text-xs font-semibold text-slate-700 hover:-translate-y-px hover:border-slate-400 disabled:opacity-60"
+            className="btn-secondary px-3 py-2 text-left text-xs disabled:opacity-60"
             onClick={() => submitPrompt(prompt)}
             disabled={loading}
             type="button"
@@ -104,8 +118,8 @@ export function AssistantPanel({ openAiAvailable, onAsk }: AssistantPanelProps) 
         ))}
       </div>
 
-      <div className="mt-4 rounded-lg border border-slate-200 bg-white/80 px-3 py-2">
-        <label className="flex items-center gap-2 text-xs text-slate-700">
+      <div className="card mt-4 px-3 py-2">
+        <label className="flex items-center gap-2 text-xs text-main">
           <input
             type="checkbox"
             checked={enhanceWording}
@@ -115,7 +129,9 @@ export function AssistantPanel({ openAiAvailable, onAsk }: AssistantPanelProps) 
           Enhance wording with OpenAI (facts remain deterministic)
         </label>
         {!openAiAvailable && (
-          <p className="mt-1 text-xs text-amber-700">No API key detected. Running in deterministic mode.</p>
+          <p className="mt-1 text-xs" style={{ color: "var(--warn)" }}>
+            No API key detected. Running in deterministic mode.
+          </p>
         )}
       </div>
 
@@ -129,14 +145,11 @@ export function AssistantPanel({ openAiAvailable, onAsk }: AssistantPanelProps) 
         <input
           value={input}
           onChange={(event) => setInput(event.target.value)}
-          className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm"
+          className="w-full rounded-lg border px-3 py-2 text-sm"
+          style={{ borderColor: "var(--input-border)", background: "var(--input-bg)", color: "var(--text)" }}
           placeholder="Ask payment assistant..."
         />
-        <button
-          type="submit"
-          className="rounded-lg bg-brand-primary px-4 py-2 text-sm font-semibold text-white shadow hover:-translate-y-px hover:shadow-md disabled:cursor-not-allowed disabled:bg-slate-300"
-          disabled={loading}
-        >
+        <button type="submit" className="btn-primary px-4 py-2 text-sm" disabled={loading}>
           Send
         </button>
       </form>
